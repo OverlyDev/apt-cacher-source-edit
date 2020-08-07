@@ -1,14 +1,13 @@
-```
-apt install apt-cacher-ng
-systemctl is-enabled apt-cacher-ng
-ufw allow 3142/tcp
-ufw reload
-```
+# About
+This will install apt-cacher-ng on a device, configure it, and host the required python script for other machines
 
-manual config
+Once the cacher is configured, running the python script on another machine will configure it to use the cacher for apt things.
 
-`echo 'Acquire::http { Proxy "http://proxy:3142"; }' | sudo tee -a /etc/apt/apt.conf.d/proxy`
+Note: The sources list is backed up before making these changes and can be restored by running the python script with `-r`.
 
-tunnel HTTPS /etc/apt-cacher-ng/acng.conf
-
-`PassThroughPattern: ^(.*):443$`
+# Instructions
+1. Clone repo onto desired cacher machine
+2. Run cacher-install.sh on said machine
+3. Run start-hosting.sh
+4. On another device, run `wget <cacher's IP>:8000/edit-sources.py`
+5. Run the python script `python3 edit-sources.py -i <IP> -p <port>` where IP is the cacher's IP and port is 3142 by default. Otherwise use your configured port for the cacher.
